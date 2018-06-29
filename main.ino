@@ -158,12 +158,21 @@ String getHTML() {
                 <html>\
                   <head>\
                     <title>Razor Quad remote control</title>\
+                    <meta name='viewport' content='width=device-width, initial-scale=1'>\
                     "+ buttonEventHandlerString() +"\
+                    <style>\
+                      .center {display: flex; align-items: center; justify-content: center;}\
+                      button {margin: 10px; text-size-adjust: auto;}\
+                    </style>\
                     </head>\
                   <body>\
-                    <p id='powerLevel'>"+ powerLevel +"</p>\
-                    <button onClick=\"sendResistanceUpdate('increase')\">Slower</button>\
-                    <button onClick=\"sendResistanceUpdate('decrease')\">Faster</button>\
+                      <div class='center'>\
+                        <p id='powerLevel'>Power: "+ powerLevel +"%</p>\
+                      </div>\
+                      <div class='center'>\
+                        <button onClick=\"sendResistanceUpdate('increase')\">Slower</button>\
+                        <button onClick=\"sendResistanceUpdate('decrease')\">Faster</button>\
+                      </div>\
                   </body>\
                 </html>";
   
