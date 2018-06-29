@@ -73,8 +73,15 @@ void loop(void){
 // resets
 
 void resetResistance(){
-  for (int i=0; i <= 90; i++){
+  for (int i=0; i <= 100; i++){
     digitalWrite(UD, HIGH);
+    digitalWrite(INC, LOW);
+    delay(10);
+    digitalWrite(INC, HIGH);
+  }
+  
+  for (int i=0; i <= 50; i++){
+    digitalWrite(UD, LOW);
     digitalWrite(INC, LOW);
     delay(10);
     digitalWrite(INC, HIGH);
@@ -101,8 +108,8 @@ void saveResistance(){
 void processResistanceChange(String resistanceType){
   boolean canChange = false;
 
-  if(((resistanceType == "decrease") && (powerLevel + 10) <= 100) 
-      || ((resistanceType == "increase") && (powerLevel - 10) >= 0)){
+  if(((resistanceType == "increase") && (powerLevel + 10) <= 100) 
+      || ((resistanceType == "decrease") && (powerLevel - 10) >= 0)){
 
     canChange = true;
   }
@@ -117,9 +124,9 @@ void processResistanceChange(String resistanceType){
     }
   
     if(resistanceType == "increase") {
-        powerLevel = powerLevel - 10;
-    } else {
         powerLevel = powerLevel + 10;
+    } else {
+        powerLevel = powerLevel - 10;
     }
   }
 }
@@ -170,8 +177,8 @@ String getHTML() {
                         <p id='powerLevel'>Power: "+ powerLevel +"%</p>\
                       </div>\
                       <div class='center'>\
-                        <button onClick=\"sendResistanceUpdate('increase')\">Slower</button>\
-                        <button onClick=\"sendResistanceUpdate('decrease')\">Faster</button>\
+                        <button onClick=\"sendResistanceUpdate('decrease')\">Slower</button>\
+                        <button onClick=\"sendResistanceUpdate('increase')\">Faster</button>\
                       </div>\
                   </body>\
                 </html>";
@@ -189,7 +196,7 @@ String buttonEventHandlerString() {
                                   var returnObj;\
                                   if (xhr.status === 200) {\
                                     returnObj = JSON.parse(xhr.responseText);\
-                                    document.getElementById('powerLevel').innerHTML = returnObj.powerLevel;\
+                                    document.getElementById('powerLevel').innerHTML = 'Power: '+ returnObj.powerLevel +'%';\
                                   }\
                               };\
                               xhr.send('{resistanceType: '+type+'}');\
