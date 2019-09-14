@@ -1,3 +1,4 @@
+#include <HTMLhelper.h>
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
@@ -17,6 +18,8 @@ unsigned long startMillis;
 String webString = "";
 int ledon = 0;
 int powerLevel = 0;
+
+HTMLhelper htmlhelpers(1);
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 ESP8266WebServer server(80);
@@ -129,6 +132,9 @@ void processResistanceChange(String resistanceType){
         powerLevel = powerLevel - 10;
     }
   }
+
+  lcd.clear();
+  lcd.print("Power: " + String(powerLevel) + "%");
 }
 
 
@@ -149,7 +155,8 @@ void handleUpdate(){
 
 
 void handle_root() {
-  String page = getHTML();
+  String powerLev = String(powerLevel);
+  String page = htmlhelpers.getMainDoc(powerLev);
   
   server.send(200, "text/html", page);
   delay(100);
@@ -166,7 +173,7 @@ String getHTML() {
                   <head>\
                     <title>Razor Quad remote control</title>\
                     <meta name='viewport' content='width=device-width, initial-scale=1'>\
-                    "+ buttonEventHandlerString() +"\
+                    "+ buttonEventHandlerString2() +"\
                     <style>\
                       .center {display: flex; align-items: center; justify-content: center;}\
                       button {margin: 10px; text-size-adjust: auto;}\
@@ -187,7 +194,7 @@ String getHTML() {
 }
 
 
-String buttonEventHandlerString() {
+String buttonEventHandlerString2() {
   String buttonHandler = "<script>\
                             function sendResistanceUpdate(type) {\
                               var xhr = new XMLHttpRequest();\
